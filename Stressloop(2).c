@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// I want you to change the increment and n and see at what point you end up with an extra loop
 
 int main(int argc, char** argv){
 
