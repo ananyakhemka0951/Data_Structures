@@ -95,6 +95,17 @@ void quickSort(int *a, int leftmost, int rightmost){
 
 
 /* ================================================== */
+
+
+int * generateArray(int n) {
+	int * t = malloc( n * sizeof(int) );
+	if(t) {
+		for(int i=0; i<n; i++) {t[i] = rand()%1000;}
+	}
+	return t;
+}
+
+
 void printArray(int arr[], int size)
 {
     int i;
