@@ -29,6 +29,7 @@ void half_ll(NodeAddress head)
    hare = hare -> next;
    tortoise = tortoise->next;
 }
+}
 
 
 /* ================================================== */
