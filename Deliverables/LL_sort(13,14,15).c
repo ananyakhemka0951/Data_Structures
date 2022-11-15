@@ -40,6 +40,49 @@ void selectionsort(NodeAddress head)
 }
 
 
+
+/* ================================================== */
+//INSERTION SORT: The array is virtually split into a sorted and an unsorted part. Values from the unsorted part are picked and placed at the correct position in the sorted part.
+
+NodeAddress insertionSort(NodeAddress head, NodeAddress sorted)
+{
+	NodeAddress current = head;
+    // NodeAddress current  is being used to traverse through the linked list and insert every element in NodeAddress sorted
+    while (current != NULL) // till current reaches NULL
+	{
+        NodeAddress next = current->next; // Store next for next iteration
+        sortedInsert(current, sorted);// sortedInsert takes the pointer current and inserts the element in sorted
+        // Update current
+        current = next;
+    }
+    // Update head to point to the start of the sorted linked list and return it
+    head = sorted;
+	return head;
+}
+
+
+void sortedInsert(NodeAddress newnode, NodeAddress sorted)
+{
+    // Special case for the head end along with checking if sorted->data >= newnode->data
+    if (sorted == NULL || sorted->data >= newnode->data) 
+	{
+        newnode->next = sorted;
+        sorted = newnode;
+    }
+    else 
+	{
+        NodeAddress c = sorted;
+        // Locate the node before the point of insertion
+        while (c->next != NULL && c->next->data < newnode->data) 
+		{
+            c = c->next;
+        }
+        newnode->next = c->next;
+        c->next = newnode;
+    }
+}
+
+
 /* ================================================== */
 //Creating a linked list
 
@@ -119,7 +162,43 @@ int main(int argc, char **argv) {
 
 
   selectionsort(list); // Selection sort
-  printLinkedList(list); // printing the sorted linked list
+  	printf("Selection Sort ");
+  	printLinkedList(list); // printing the sorted linked list
+
+
+
+	
+	
+	//Insertion sort
+	NodeAddress sorted=NULL;
+
+
+	//Creating a linked list for Insertion sort
+	printf("Enter the size\n");
+    int a;
+    scanf("%d",&a);
+    
+	if(a<=0)
+	{
+        printf("Size should be greater than 0");
+        return 0;
+    }
+
+	NodeAddress list1;// to store the head of the initial linked list
+	list1=linkedList(a);// creating a linked list and storing the head in the list
+    printLinkedList(list1); // printing the linked list that was entered 
+
+
+	NodeAddress h= insertionSort(list1, sorted);
+	printf("Insertion Sort:");
+	printLinkedList(h); // printing the sorted linked list
+
+
+
+
+
   freeLinkedList(list);
+  freeLinkedList(list1);
+  freeLinkedList(list2);
   return 0;
 }
