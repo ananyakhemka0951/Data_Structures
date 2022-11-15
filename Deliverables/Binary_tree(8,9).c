@@ -1,65 +1,139 @@
-// BINARY SEARCH TREE
-// CREATE AND INSERT
-
 #include <stdio.h>
-#include <stdlib.h> // introductory 
- 
-struct node { //creating a structure with val, left and right pointers 
+#include <stdlib.h>
+
+struct node
+{
     int val;
-    struct node *left; // left pointer to smaller numbers 
-    struct node*right; // right pointer to larger numbers
-}; typedef struct node * NodeAddress; // making a shortcut for accessing the above structure 
- 
-// creating or adding a new node to BST 
- NodeAddress Add_Node(int val) // add the integer value of val
+    struct node* left;
+    struct node* right;
+};
+
+typedef struct node* address;
+
+address search(address root, int val )
 {
-     NodeAddress new = malloc(sizeof(struct node)); // allocating memory for the new node which is of size node 
-    new->val = val; // adding value to the new node created 
-    new->left =NULL;  // left of new node will be empty 
-    new->right = NULL; // right of new node will be empty 
-    return new; 
+    if(root == NULL)
+    return NULL;
+
+    if(val > root->val)
+    {
+        search(root->right, val);
+    }
+    else if(val < root->val )
+    {
+        search(root->left, val);
+    }
+    
+
+        return root;
+    
 }
- 
-// didnt understand, had to copy to run the code 
-// will meet with TA to understand the following lines 25- 32
-void inorder(NodeAddress root)
+
+void create(address root, int val)
 {
-    if (root != NULL) {
+    root = malloc(sizeof(struct node));
+    root->val = val;
+}
+
+address insert(address root, int val)
+{
+    if(root == NULL)
+    {
+        create(root, val);
+        return root;
+    }
+
+    else if(val > root->val)
+    {
+        if(root->right)
+            insert(root->right, val);
+        else
+            create(root->right, val);
+    }
+
+    else if(val < root->val)
+    {
+        if(root->left)
+            insert(root->left, val);
+        else
+            create(root->left, val);
+    }
+
+    
+        return root;
+}
+
+void inorder(address root)
+{
+    if(root->left)
+    {
         inorder(root->left);
-        printf("%d \n", root->val);
+    }
+    if(root)
+    {
+        printf("%d", root->val);
+    }
+    if(root->right)
+    {
         inorder(root->right);
     }
 }
- 
-// inserting a new node to an existing BST
-NodeAddress insert_node(NodeAddress node, int val)
+
+void delete(address d)
 {
-    /* If the tree is empty, return a new node */
-    if (node == NULL)
-        return Add_Node(val); // if node = NULL then add a node with value there by previously defined function
- 
-    // if node is not equal to NULL then traverse down the tree to find where node = NULL
-    if ( val < node->val) 
-        node->left = insert_node(node->left, val); // if value is lesser than the root then move to the left and carry out the process again till the time root = NULL with the (changed) root and (to be insterted) value as inputs
-    else if (val > node->val)
-        node->right = insert_node(node->right, val); // repeat the same thing with greater than case
-    return node;
+    d = NULL;   
 }
- 
-// calling all functions 
+
+
 int main()
 {
-    struct node* root = NULL;
-    root = insert_node(root, 5);
-    insert_node(root, 3);
-    insert_node(root, 2);
-    insert_node(root, 4);
-    insert_node(root, 7);
-    insert_node(root, 6);
-    insert_node(root, 8);
- 
-    // print inoder traversal of the BST
-    inorder(root); // didnt understand, had to copy to run the code 
- 
+    int n;
+    printf("enter the size of array, that will be made into a binary tree.");
+    scanf("%d", &n);
+    int arr[n];
+    for(int i = 0; i<n; i++)
+    {
+        printf("enter number: ");
+        scanf("%d", &arr[n]);
+    }
+
+       for(int i = 0; i<n; i++)
+    {
+        printf("%d, ", arr[i]);
+    }
+
+    address root = malloc(sizeof(struct node));
+
+    for(int i=0; i<n; i++)
+    {
+        if(i == 0)
+        {
+            root->val = arr[i];
+        }
+        insert(root, arr[i]);
+    }
+    
+    inorder(root);
+
+/*
+    int k;
+    printf("Do you want to delete any value? 1/0 : ");
+    scanf("%s", &k);
+    if(k==1)
+    {
+        int d;
+        printf("enter value to delete: ");
+        scanf("%d ", &d);
+        if(search(root, d))
+        {
+            address d = search(root, d);
+            delete(d);
+        }
+        else
+        {
+            printf("element does not exist");
+    }
+    }
+*/
     return 0;
 }
