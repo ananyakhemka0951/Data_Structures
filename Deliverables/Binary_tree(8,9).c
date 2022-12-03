@@ -8,9 +8,9 @@ struct node
     struct node* right;
 };
 
-typedef struct node* address;
+typedef struct node* Nodeaddress;
 
-address search(address root, int val )
+Nodeaddress search(Nodeaddress root, int val)
 {
     if(root == NULL)
     return NULL;
@@ -29,14 +29,16 @@ address search(address root, int val )
     
 }
 
-void create(address root, int val)
+#To allocate space for a new node and assign the val to it.
+void create(Nodeaddress root, int val)
 {
-    root = malloc(sizeof(struct node));
+    root = malloc(sizeof(struct node)); #
     root->val = val;
 }
 
-address insert(address root, int val)
+Nodeaddress insert(Nodeaddress root, int val)
 {
+    #Case for the root of the tree
     if(root == NULL)
     {
         create(root, val);
@@ -63,7 +65,7 @@ address insert(address root, int val)
         return root;
 }
 
-void inorder(address root)
+void inorder(Nodeaddress root)
 {
     if(root->left)
     {
@@ -88,7 +90,7 @@ void delete(address d)
 int main()
 {
     int n;
-    printf("enter the size of array, that will be made into a binary tree.");
+    printf("enter the size of array, that will be made into a binary search tree.");
     scanf("%d", &n);
     int arr[n];
     for(int i = 0; i<n; i++)
@@ -102,7 +104,7 @@ int main()
         printf("%d, ", arr[i]);
     }
 
-    address root = malloc(sizeof(struct node));
+    Nodeaddress root = malloc(sizeof(struct node));
 
     for(int i=0; i<n; i++)
     {
