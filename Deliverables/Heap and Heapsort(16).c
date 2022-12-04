@@ -62,12 +62,15 @@ void heapSort(int arr[], int N)
 {
  
     // Build max heap
- //first index of the non-leaf node whose index is given by n/2 – 1
-    for (int i = N / 2 - 1; i >= 0; i--)
+ //last index of the non-leaf node whose index is given by n/2 – 1. 
+ //i starts from the last index of the non-leaf node as the node is compared with its children and then we traverse upwards.
+    for (int i = N / 2 - 1; i >= 0; i--)//Function to find the largest element and switching it till it becomes the root
+    {
  
         heapify(arr, N, i);
+    }
  
-    // Heap sort
+    // Function to sort the elements and then heapify them
     for (int i = N - 1; i >= 0; i--) {
  
         swap(&arr[0], &arr[i]);
