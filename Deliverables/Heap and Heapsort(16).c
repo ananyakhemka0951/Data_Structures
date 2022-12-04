@@ -1,16 +1,26 @@
-void swap(int* a, int* b)
+#include<stdio.h>
+#include<stdlib.h>
+
+
+// Function to swap two elements 
+void swap(int* x, int* y)
 {
  
-    int temp = *a;
+    int t = *x;
  
-    *a = *b;
+    *x = *y;
  
-    *b = temp;
+    *y = t;
 }
  
+
+
+
 // To heapify a subtree rooted with node i
 // which is an index in arr[].
 // n is size of heap
+
+
 void heapify(int arr[], int N, int i)
 {
     // Find largest among root, left child and right child
@@ -52,6 +62,7 @@ void heapSort(int arr[], int N)
 {
  
     // Build max heap
+ //first index of the non-leaf node whose index is given by n/2 – 1
     for (int i = N / 2 - 1; i >= 0; i--)
  
         heapify(arr, N, i);
@@ -75,14 +86,32 @@ void printArray(int arr[], int N)
     printf("\n");
 }
  
-// Driver's code
 int main()
 {
-    int arr[] = { 12, 11, 13, 5, 6, 7 };
-    int N = sizeof(arr) / sizeof(arr[0]);
- 
-    // Function call
-    heapSort(arr, N);
-    printf("Sorted array is\n");
-    printArray(arr, N);
+    printf("Enter the size of array you want: ");
+    int n;
+    scanf("%d", &n);
+    int * arr = malloc(n*sizeof(int)) ;
+
+    for(int i = 0; i<n; i++)
+    {
+        printf("Enter number: ");
+        scanf("%d", &arr[i]);
+    } 
+
+    printf("original array: ");
+    for(int i = 0; i<n; i++)
+    {
+        printf("%d, ", arr[i]);
+    }
+
+    arr = heapsort(arr, n);    
+
+     printf("sorted array: ");
+    for(int i = 0; i<n; i++)
+    {
+        printf("%d, ", arr[i]);
+    }
+
+    return 0; ;
 }
