@@ -6,77 +6,106 @@ struct node
  int val;
  struct node* left;
  struct node* right;
- int height; //new attribute, stores the number of children following the node
+ int height; //stores the height/number of children following the node
 };
 
-typedef struct node* address;
+typedef struct node * Nodeaddress; // creating a new data type called NodeAddress which is the address of the node
 
-int max(int a, int b)
+
+
+/* ================================================== */
+//Function to extract the maximum between the two numbers
+int findmax(int x, int y)
 {
-    if(a>b)
-    return a;
+    if(x>y)
+    return x;
     else
-    return b;
+    return y;
 }
 
-int findHeight(address n)//returns the height of a node
+
+//Function to extract the height of the node
+int findHeight(Nodeaddress n)//returns the height of a node
 {
     if(n==NULL)
         return 0;
     return n->height;
 }
 
-address create(int val) //allocates memory space for a node
-{
-    address node = malloc(sizeof(struct node));
-    node->val = val;
-    node->left = NULL;
-    node->right = NULL;
-    node->height = 1; //new leaf node always has height one
 
-    return node;
+
+//Function to allocate space and initialize a node
+Nodeaddress create(int val) 
+{
+    Nodeaddress newnode = malloc(sizeof(struct node));//To allocate the required space for a node
+    newnode->val = val;
+    newnode->left = NULL;
+    newnode->right = NULL;
+    newnode->height = 1; //new leaf node always has height one
+
+    return newnode;
 }
 
-int bf(address n) //finds the balance factor
+
+
+
+//Function to find out the balance factor (left height - right height) of n 
+int bf(Nodeaddress n) 
 {
     if(n==NULL)
         return 0;
-    return findHeight(n->left) - findHeight(n->right); 
+    return (findHeight(n->left) - findHeight(n->right)); 
 }
 
-address L(address x)//left rotate
+
+
+
+
+
+
+/* ================================================== */
+//Rotation 
+
+
+
+//Function to left rotate
+Nodeaddress Lrotate(Nodeaddress x)
 {
-    address y = x->right;
-    address a = y->left;
+    Nodeaddress y = x->right;
+    Nodeaddress a = y->left;
 
     y->left = x;
     x->right = a;
 
-    x->height = max(findHeight(x->left), findHeight(x->right)) + 1; 
-    y->height = max(findHeight(y->left), findHeight(y->right)) + 1; 
+    x->height = findmax(findHeight(x->left), findHeight(x->right)) + 1; 
+    y->height = findmax(findHeight(y->left), findHeight(y->right)) + 1; 
     
     return y;
 
 }
 
-address R(address y) //right rotate
+
+//Function to right rotate
+Nodeaddress Rrotate(Nodeaddress y) //right rotate
 {
-    address x = y->left;
-    address b = x->right;
+    Nodeaddress x = y->left;
+    Nodeaddress b = x->right;
 
     x->right = y;
     y->left = b;
 
-    y->height = max(findHeight(y->left), findHeight(y->right)) + 1; 
-    x->height = max(findHeight(x->left), findHeight(x->right)) + 1; 
+    y->height = findmax(findHeight(y->left), findHeight(y->right)) + 1; 
+    x->height = findmax(findHeight(x->left), findHeight(x->right)) + 1; 
 
     return x;
 }
 
-address insert(address node, int val)
+
+//Function to insert the val in the tree and recursively balance out the tree via rotation
+Nodeaddress insert(Nodeaddress node, int val)
 {
     if(node==NULL)
-        create(val);
+        create(val);//Function to allocate space for a new node and initialize it
     
     if(val<node->val)
         insert(node->left, val);
@@ -84,7 +113,7 @@ address insert(address node, int val)
     else if(val>node->val)
         insert(node->right, val);
 
-    node->height = 1 + max(findHeight(node->left), findHeight(node->right));
+    node->height = 1 + findmax(findHeight(node->left), findHeight(node->right));
     int bal = bf(node);
 
 //left left
@@ -116,6 +145,11 @@ address insert(address node, int val)
     return node;
 }
 
+
+
+
+
+/* ================================================== */
 void prefixPrint(address root)
 {
 
