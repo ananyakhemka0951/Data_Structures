@@ -69,37 +69,47 @@ int bf(Nodeaddress n)
 
 
 //Function to left rotate
-Nodeaddress Lrotate(Nodeaddress x)
+Nodeaddress Lrotate(Nodeaddress r)
 {
-    Nodeaddress y = x->right;
+    Nodeaddress y = r->right;
     Nodeaddress a = y->left;
 
-    y->left = x;
-    x->right = a;
+    
+    y->left = r; // As x is less than y, x will come to the left of y 
+    x->right = a; // As a is less than y and y is greater than x, it will come to the right of x after the rotation
 
-    x->height = findmax(findHeight(x->left), findHeight(x->right)) + 1; 
+    //As we will have to update the heights of the nodes according to its new position,
+    r->height = findmax(findHeight(r->left), findHeight(r->right)) + 1; 
     y->height = findmax(findHeight(y->left), findHeight(y->right)) + 1; 
     
-    return y;
+    return y; // y which was the right root of r, has been replaced by r thus we will return the newnode y
 
 }
 
 
 //Function to right rotate
-Nodeaddress Rrotate(Nodeaddress y) //right rotate
+Nodeaddress Rrotate(Nodeaddress r) //right rotate
 {
-    Nodeaddress x = y->left;
-    Nodeaddress b = x->right;
+    Nodeaddress y = r->left;
+    Nodeaddress a = y->right;
 
-    x->right = y;
-    y->left = b;
-
+    y->right = r;
+    x->left = a;
+    
+ 
+    //As we will have to update the heights of the nodes according to its new position,
+    r->height = findmax(findHeight(r->left), findHeight(r->right)) + 1; 
     y->height = findmax(findHeight(y->left), findHeight(y->right)) + 1; 
-    x->height = findmax(findHeight(x->left), findHeight(x->right)) + 1; 
 
-    return x;
+    return y; // y which was the left root of r, has been replaced by r thus we will return the newnode y
 }
 
+
+
+
+
+
+/* ================================================== */
 
 //Function to insert the val in the tree and recursively balance out the tree via rotation
 Nodeaddress insert(Nodeaddress node, int val)
@@ -107,39 +117,57 @@ Nodeaddress insert(Nodeaddress node, int val)
     if(node==NULL)
         create(val);//Function to allocate space for a new node and initialize it
     
+    //To find the correct position of the val, we will compare the val with the node's value and recursively call the function.
     if(val<node->val)
-        insert(node->left, val);
+    {
+        node->left=insert(node->left, val);
+    }
 
     else if(val>node->val)
-        insert(node->right, val);
+    {
+        node->right=insert(node->right, val);
+    }
+ 
+    else
+    {
+     return node; //If val is equal to nodes val, an extra node will not be added. Therefore, this returns the correct position for the val.
+    }
+ 
+    
+/* ================================================== */
+ //After inserting the val in the tree, we will calculate the balance factor and thereby balance the tree out accordingly.
 
+ 
+    //Finds the updated height of the node
     node->height = 1 + findmax(findHeight(node->left), findHeight(node->right));
     int bal = bf(node);
 
+ 
+ //Following are the four cases for rotation along with its cases
 //left left
     if(bal>1 && val<node->right->val)
     {
-        return R(node);
+        return Rrotate(node);
     }
 
 //right right 
     if(bal<-1 && val>node->left->val)
     {
-        return L(node);
+        return Lrotate(node);
     }
 
 //left right   
     if(bal>1 && val>node->right->val)
     {
-        node->left = L(node);
-        return R(node);
+        node->left = Lrotate(node);
+        return Rrotate(node);
     }
 
 //right left    
     if(bal<-1 && val<node->left->val)
     {
-        node->right = R(node);
-        return L(node);
+        node->right = Rrotate(node);
+        return Lrotate(node);
     }
 
     return node;
@@ -150,7 +178,8 @@ Nodeaddress insert(Nodeaddress node, int val)
 
 
 /* ================================================== */
-void prefixPrint(address root)
+//Preorder traversal of the tree. [root - left - right]
+void prefixPrint(Nodeaddress root)
 {
 
     printf("%d ",root->val);
@@ -160,17 +189,33 @@ void prefixPrint(address root)
     prefixPrint(root->right);
 }
 
-int main()
-{
-    address head = NULL;
 
-    head = insert(head, 50);
-    head = insert(head, 5);
-    head = insert(head, 20);
-    head = insert(head, 2);
-    head = insert(head, 65);
-    head = insert(head, 90);
-    prefixPrint(head);
+
+/* ================================================== */
+int main(int argc, char **argv)
+{
+    Nodeaddress root = NULL;
+ 
+    	printf("Enter the size\n");
+    int n;
+    scanf("%d",&n);
+    
+	if(n<=0)
+ {
+        printf("Size should be greater than 0");
+        return 0;
+    }
+ 
+   int x=0;
+  printf("Enter the elements \n");
+   
+   for(i=0; i<n; i++) {
+    scanf("%d",&x);
+    root=insert(root,x);
+   }
+    
+    printf("The preorder traversal:");
+    prefixPrint(root);
 
     return 0;
 }
